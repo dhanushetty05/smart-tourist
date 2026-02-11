@@ -1,0 +1,156 @@
+{
+  "identity": {
+    "persona": "E1",
+    "philosophy": "Fusion over Imitation. Mix 'GovTech Authority' with 'Fintech Precision'.",
+    "anti_patterns": [
+      "Generic Bootstrap/Material Design look",
+      "Low contrast text (grey on grey)",
+      "Boring symmetrical grids",
+      "Default 'SaaS Blue' without personality"
+    ]
+  },
+  "theme_strategy": {
+    "mode": "hybrid",
+    "logic": "Light Mode for Tourist Portal (Trust, Clarity, Day-use). Dark Mode for Police Admin (Night-ops, High Contrast, Command Center).",
+    "emotional_tone": {
+      "tourist": "Safe, Assured, Connected",
+      "police": "Vigilant, Efficient, Authoritative"
+    }
+  },
+  "typography": {
+    "headings": {
+      "font_family": "Manrope, sans-serif",
+      "usage": "Headings, Hero Text, Modal Titles",
+      "weights": ["600", "800"],
+      "tracking": "tracking-tight"
+    },
+    "body": {
+      "font_family": "Inter, sans-serif",
+      "usage": "Paragraphs, Form Labels, UI Text",
+      "weights": ["400", "500"]
+    },
+    "data": {
+      "font_family": "JetBrains Mono, monospace",
+      "usage": "IDs, Coordinates, Timestamps, API Keys",
+      "weights": ["500"]
+    }
+  },
+  "colors": {
+    "palette": {
+      "primary": {
+        "name": "Civic Slate",
+        "hex": "#0f172a",
+        "tailwind": "bg-slate-900",
+        "usage": "Admin Sidebar, Primary Buttons (Tourist)"
+      },
+      "secondary": {
+        "name": "Trust Blue",
+        "hex": "#2563eb",
+        "tailwind": "bg-blue-600",
+        "usage": "Active States, Links, Highlights"
+      },
+      "success": {
+        "name": "Safety Emerald",
+        "hex": "#10b981",
+        "tailwind": "bg-emerald-500",
+        "usage": "Safe Status, Verified Badges"
+      },
+      "danger": {
+        "name": "Signal Red",
+        "hex": "#dc2626",
+        "tailwind": "bg-red-600",
+        "usage": "Panic Button, Critical Alerts, High Risk Zones"
+      },
+      "background": {
+        "tourist": "#f8fafc",
+        "admin": "#020617"
+      }
+    },
+    "gradients": {
+      "panic": "bg-gradient-to-r from-red-600 to-red-500 animate-pulse",
+      "safe": "bg-gradient-to-r from-emerald-500 to-teal-500"
+    }
+  },
+  "layout_strategy": {
+    "tourist_portal": {
+      "type": "Mobile-First Card Stack",
+      "structure": [
+        "Header: Logo + Profile Avatar",
+        "Hero: Safety Score (Large Circular Indicator)",
+        "Action: Panic Button (Floating or Fixed Bottom)",
+        "Content: Alert History (Timeline)",
+        "Footer: Quick Links"
+      ],
+      "spacing": "Generous (p-6 to p-8) for touch targets"
+    },
+    "admin_dashboard": {
+      "type": "Bento Grid (High Density)",
+      "structure": [
+        "Sidebar: Navigation (Collapsed on Tablet)",
+        "Main: Map View (Hero - col-span-3 row-span-2)",
+        "Right: Live Alert Feed (Vertical List)",
+        "Bottom: Analytics/Stats (Small Cards)"
+      ],
+      "spacing": "Tight (p-4) for data density"
+    }
+  },
+  "components": {
+    "library": "shadcn/ui",
+    "custom_components": [
+      {
+        "name": "SafetyScoreRing",
+        "description": "Animated SVG circle showing 0-100 score. Green > 80, Yellow > 50, Red < 50.",
+        "path": "src/components/custom/SafetyScoreRing.js"
+      },
+      {
+        "name": "PanicButton",
+        "description": "Large, tactile button. Long-press to activate (prevents accidental clicks). Haptic feedback visual.",
+        "path": "src/components/custom/PanicButton.js"
+      },
+      {
+        "name": "LiveMap",
+        "description": "Wrapper around map library (Leaflet/Mapbox). Custom markers for Tourists (Blue) and Alerts (Red).",
+        "path": "src/components/custom/LiveMap.js"
+      },
+      {
+        "name": "DigitalIDCard",
+        "description": "Flip card animation. Front: Photo + Details. Back: QR Code.",
+        "path": "src/components/custom/DigitalIDCard.js"
+      }
+    ],
+    "styling_rules": {
+      "radius": "rounded-lg (Tourist) vs rounded-sm (Admin)",
+      "shadows": "shadow-lg (Tourist Cards) vs shadow-none border-r (Admin Panels)",
+      "glassmorphism": "Use backdrop-blur-md for overlays and sticky headers."
+    }
+  },
+  "assets": {
+    "images": [
+      {
+        "category": "hero_tourist",
+        "url": "https://images.unsplash.com/photo-1561558471-ea8ebc7c9ae5",
+        "description": "Couple walking on dock, safe and happy vibe."
+      },
+      {
+        "category": "admin_monitoring",
+        "url": "https://images.unsplash.com/photo-1768796365086-a030a51d10b5",
+        "description": "Officer with drone controller, high-tech monitoring context."
+      },
+      {
+        "category": "map_placeholder",
+        "url": "https://images.unsplash.com/flagged/photo-1580051720305-a944536881fb",
+        "description": "Aerial city view for map backgrounds."
+      }
+    ],
+    "icons": "Lucide React (default). Use 'Shield', 'AlertTriangle', 'MapPin', 'UserCheck'."
+  },
+  "universal_guidelines": [
+    "DO NOT use generic 'AI' emojis (🤖, 🚀) in UI text.",
+    "Ensure all interactive elements have `data-testid`.",
+    "Use `sonner` for all toast notifications.",
+    "Transitions: `transition-all duration-300 ease-out` for hover states.",
+    "Accessibility: Ensure Red/Green status colors have text labels for colorblind users.",
+    "Forms: Use `react-hook-form` with `zod` validation (via Shadcn Form)."
+  ],
+  "instructions_to_main_agent": "1. Install dependencies: `lucide-react`, `recharts`, `framer-motion`, `clsx`, `tailwind-merge`. 2. Setup Tailwind theme colors first. 3. Build the 'SafetyScoreRing' and 'PanicButton' components early as they are core to the Tourist experience. 4. For the Map, use a placeholder component if a real map key is not available, but style it to look real."
+}
