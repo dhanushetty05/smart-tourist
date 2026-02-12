@@ -35,7 +35,9 @@ const Login = () => {
         navigate('/tourist/dashboard');
       }
     } catch (error) {
-      toast.error(error.response?.data?.detail || 'Login failed');
+      console.error('Login error:', error);
+      const errorMessage = error.response?.data?.message || error.response?.data?.detail || error.message || 'Login failed';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

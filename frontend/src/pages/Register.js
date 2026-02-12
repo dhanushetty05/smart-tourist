@@ -42,7 +42,9 @@ const Register = () => {
       toast.success('Registration successful!');
       navigate('/tourist/profile-setup');
     } catch (error) {
-      toast.error(error.response?.data?.detail || 'Registration failed');
+      console.error('Registration error:', error);
+      const errorMessage = error.response?.data?.message || error.response?.data?.detail || error.message || 'Registration failed';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

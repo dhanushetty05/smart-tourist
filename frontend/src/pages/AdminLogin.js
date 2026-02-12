@@ -38,7 +38,9 @@ const AdminLogin = () => {
       }
       navigate('/admin/dashboard');
     } catch (error) {
-      toast.error(error.response?.data?.detail || 'Authentication failed');
+      console.error('Admin auth error:', error);
+      const errorMessage = error.response?.data?.message || error.response?.data?.detail || error.message || 'Authentication failed';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

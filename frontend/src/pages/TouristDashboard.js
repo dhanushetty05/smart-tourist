@@ -40,7 +40,9 @@ const TouristDashboard = () => {
   const fetchTouristProfile = async () => {
     try {
       const response = await axios.get(`${API_URL}/tourists/me`);
-      setTourist(response.data);
+      // Handle both response.data and response.data.data formats
+      const touristData = response.data.data || response.data;
+      setTourist(touristData);
     } catch (error) {
       if (error.response?.status === 404) {
         navigate('/tourist/profile-setup');
@@ -55,18 +57,28 @@ const TouristDashboard = () => {
   const fetchAlerts = async () => {
     try {
       const response = await axios.get(`${API_URL}/alerts`);
-      setAlerts(response.data);
+      const alertsData = response.data.data || response.data;
+      setAlerts(Array.isArray(alertsData) ? alertsData : []);
     } catch (error) {
-      console.error('Failed to load alerts');
+      console.error('Failed to load alerts:', error);
+      setAlerts([]);
     }
   };
 
   const fetchGeoZones = async () => {
     try {
       const response = await axios.get(`${API_URL}/geo-zones`);
-      setGeoZones(response.data);
+      // Ensure response.data is an array
+      if (Array.isArray(response.data)) {
+        setGeoZones(response.data);
+      } else if (response.data?.zones && Array.isArray(response.data.zones)) {
+        setGeoZones(response.data.zones);
+      } else {
+        setGeoZones([]);
+      }
     } catch (error) {
-      console.error('Failed to load geo zones');
+      console.error('Failed to load geo zones:', error);
+      setGeoZones([]); // Set empty array on error
     }
   };
 
@@ -185,7 +197,7 @@ const TouristDashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex justify-center py-8">
-              <SafetyScoreRing score={tourist?.safety_score || 85} size={220} />
+              <SafetyScoreRing score={tourist?.safetyScore || tourist?.safety_score || 85} size={220} />
             </CardContent>
           </Card>
 
@@ -216,7 +228,11 @@ const TouristDashboard = () => {
                   showCurrentLocation={true}
                   currentLocation={currentLocation}
                   geoZones={geoZones}
-                  alerts={alerts.filter(a => a.tourist_id === tourist?.tourist_id)}
+                  alerts={alerts.filter(a => {
+                    const alertTouristId = a.tourist_id || a.touristId;
+                    const currentTouristId = tourist?.tourist_id || tourist?.touristId;
+                    return alertTouristId === currentTouristId;
+                  })}
                 />
               </div>
               {!currentLocation && (

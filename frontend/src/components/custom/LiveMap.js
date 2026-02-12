@@ -85,17 +85,19 @@ const LiveMap = ({
     });
 
     // Add geo zones
-    geoZones.forEach(zone => {
-      const color = zone.risk_level === 'high' ? '#dc2626' : zone.risk_level === 'medium' ? '#f59e0b' : '#10b981';
-      const circle = L.circle([zone.center_lat, zone.center_lng], {
-        color: color,
-        fillColor: color,
-        fillOpacity: 0.2,
-        radius: zone.radius * 1000 // Convert to meters
-      }).addTo(mapInstance.current);
-      circle.bindPopup(`<b>${zone.name}</b><br/>Risk Level: ${zone.risk_level}<br/>${zone.description || ''}`);
-      markersRef.current.push(circle);
-    });
+    if (Array.isArray(geoZones)) {
+      geoZones.forEach(zone => {
+        const color = zone.risk_level === 'high' ? '#dc2626' : zone.risk_level === 'medium' ? '#f59e0b' : '#10b981';
+        const circle = L.circle([zone.center_lat, zone.center_lng], {
+          color: color,
+          fillColor: color,
+          fillOpacity: 0.2,
+          radius: zone.radius * 1000 // Convert to meters
+        }).addTo(mapInstance.current);
+        circle.bindPopup(`<b>${zone.name}</b><br/>Risk Level: ${zone.risk_level}<br/>${zone.description || ''}`);
+        markersRef.current.push(circle);
+      });
+    }
 
     return () => {
       markersRef.current.forEach(marker => marker.remove());

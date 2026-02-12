@@ -9,8 +9,21 @@ const DigitalIDCard = ({ tourist }) => {
 
   if (!tourist) return null;
 
-  const isActive = tourist.status === 'active';
-  const isExpired = new Date(tourist.exit_date) < new Date();
+  // Handle both camelCase and snake_case field names
+  const touristData = {
+    status: tourist.status,
+    photoUrl: tourist.photoUrl || tourist.photo_url,
+    name: tourist.name,
+    touristId: tourist.touristId || tourist.tourist_id,
+    entryDate: tourist.entryDate || tourist.entry_date,
+    exitDate: tourist.exitDate || tourist.exit_date,
+    emergencyContact: tourist.emergencyContact || tourist.emergency_contact,
+    qrCode: tourist.qrCode || tourist.qr_code,
+    blockchainHash: tourist.blockchainHash || tourist.blockchain_hash
+  };
+
+  const isActive = touristData.status === 'active';
+  const isExpired = new Date(touristData.exitDate) < new Date();
 
   return (
     <div className="perspective-1000 w-full max-w-md mx-auto" data-testid="digital-id-card">
@@ -40,9 +53,9 @@ const DigitalIDCard = ({ tourist }) => {
                   {isExpired ? 'Expired' : tourist.status}
                 </Badge>
               </div>
-              {tourist.photo_url && (
+              {touristData.photoUrl && (
                 <img
-                  src={tourist.photo_url}
+                  src={touristData.photoUrl}
                   alt="Tourist"
                   className="w-20 h-20 rounded-full border-4 border-white object-cover"
                   data-testid="tourist-photo"
@@ -52,21 +65,21 @@ const DigitalIDCard = ({ tourist }) => {
 
             <div className="space-y-2">
               <h2 className="text-2xl font-heading font-bold" data-testid="tourist-name">
-                {tourist.name}
+                {touristData.name}
               </h2>
               <p className="font-mono text-sm opacity-90" data-testid="tourist-id">
-                ID: {tourist.tourist_id}
+                ID: {touristData.touristId}
               </p>
             </div>
 
             <div className="flex justify-between items-end text-xs opacity-75">
               <div>
                 <Calendar className="w-3 h-3 inline mr-1" />
-                Valid: {new Date(tourist.entry_date).toLocaleDateString()} - {new Date(tourist.exit_date).toLocaleDateString()}
+                Valid: {new Date(touristData.entryDate).toLocaleDateString()} - {new Date(touristData.exitDate).toLocaleDateString()}
               </div>
               <div>
                 <Phone className="w-3 h-3 inline mr-1" />
-                {tourist.emergency_contact}
+                {touristData.emergencyContact}
               </div>
             </div>
           </CardContent>
@@ -81,9 +94,9 @@ const DigitalIDCard = ({ tourist }) => {
             <div className="flex flex-col items-center gap-4">
               <QrCode className="w-8 h-8" />
               <h3 className="font-heading font-bold text-lg">Verification QR Code</h3>
-              {tourist.qr_code ? (
+              {touristData.qrCode ? (
                 <img
-                  src={`data:image/png;base64,${tourist.qr_code}`}
+                  src={touristData.qrCode}
                   alt="QR Code"
                   className="w-40 h-40 bg-white p-2 rounded-lg"
                   data-testid="qr-code"
@@ -94,7 +107,7 @@ const DigitalIDCard = ({ tourist }) => {
                 </div>
               )}
               <p className="text-xs opacity-75 text-center font-mono" data-testid="blockchain-hash">
-                Blockchain Hash: {tourist.blockchain_hash?.substring(0, 16)}...
+                Blockchain Hash: {touristData.blockchainHash?.substring(0, 16)}...
               </p>
             </div>
           </CardContent>

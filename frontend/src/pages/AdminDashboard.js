@@ -47,12 +47,23 @@ const AdminDashboard = () => {
         axios.get(`${API_URL}/analytics/dashboard`)
       ]);
       
-      setTourists(touristsRes.data);
-      setAlerts(alertsRes.data);
-      setGeoZones(zonesRes.data);
-      setAnalytics(analyticsRes.data);
+      // Handle response data formats
+      const touristsData = touristsRes.data.data || touristsRes.data;
+      const alertsData = alertsRes.data.data || alertsRes.data;
+      const zonesData = zonesRes.data.data || zonesRes.data;
+      const analyticsData = analyticsRes.data.data || analyticsRes.data;
+      
+      setTourists(Array.isArray(touristsData) ? touristsData : []);
+      setAlerts(Array.isArray(alertsData) ? alertsData : []);
+      setGeoZones(Array.isArray(zonesData) ? zonesData : []);
+      setAnalytics(analyticsData);
     } catch (error) {
+      console.error('Failed to load dashboard data:', error);
       toast.error('Failed to load dashboard data');
+      // Set empty arrays on error
+      setTourists([]);
+      setAlerts([]);
+      setGeoZones([]);
     } finally {
       setLoading(false);
     }
@@ -74,13 +85,13 @@ const AdminDashboard = () => {
   };
 
   const filteredTourists = tourists.filter(t => 
-    t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    t.tourist_id.toLowerCase().includes(searchTerm.toLowerCase())
+    (t.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (t.tourist_id || t.touristId || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const filteredAlerts = alerts.filter(a => 
-    a.tourist_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    a.tourist_id.toLowerCase().includes(searchTerm.toLowerCase())
+    (a.tourist_name || a.touristName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (a.tourist_id || a.touristId || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (loading) {
